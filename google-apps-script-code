@@ -1,0 +1,35 @@
+function onOpen() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var menuEntries = [ {name: "Add dates to Calenadar", functionName: "AddDatestoCal"} ];
+  ss.addMenu("Add Dates to Calendar", menuEntries);
+}
+
+function AddDatestoCal() {
+  // https://blog.ouseful.info/2010/03/04/maintaining-google-calendars-from-a-google-spreadsheet/
+  // https://developers.google.com/apps-script/articles/sending_emails?csw=1
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var startRow = 2;  // First row of data to process
+  var numRows = 5;   // Number of rows to process
+  var dataRange = sheet.getRange(startRow, 1, numRows, 3);
+  var data = dataRange.getValues();
+  var cal = CalendarApp.getDefaultCalendar();
+  Logger.log("Calender: " + cal);
+  for (i in data) {
+    Logger.log("i: " + i);
+    var row = data[i];
+    Logger.log("Row: " + row);
+    var title = sheet.getName();  // Sheet name
+    Logger.log("Title: " + title);
+    var desc = title + " " + row[0];       // Second column
+    Logger.log("Desc: " + desc);
+    var tstart = row[2];
+    Logger.log("Tstart: " + tstart);
+    //var tstop = row[3];
+    //var loc = row[4];
+    //cal.createEvent(title, new Date("March 3, 2010 08:00:00"), new Date("March 3, 2010 09:00:00"), {description:desc,location:loc});
+    //cal.createEvent(title, tstart, {description:desc});
+    //CalendarApp.getDefaultCalendar().createAllDayEvent(title, tstart);
+    //cal.createAllDayEvent('Test Title', new Date("March 19, 2017"));
+    cal.createAllDayEvent(desc, tstart);
+ }
+}
